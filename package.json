@@ -1,0 +1,27 @@
+{
+  "name": "maven-auto-scaffold",
+  "displayName": "Maven Auto Scaffold",
+  "description": "Automatically creates Maven directory structure when a pom.xml is added",
+  "version": "1.0.5",
+  "publisher": "snupai",
+  "engines": {
+    "vscode": "^1.80.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "workspaceContains:**/pom.xml",
+    "onStartupFinished"
+  ],
+  "main": "./out/extension.js",
+  "scripts": {
+    "compile": "tsc -p ./",
+    "package": "npx @vscode/vsce package --no-dependencies"
+  },
+  "devDependencies": {
+    "@types/node": "^25.5.2",
+    "@types/vscode": "^1.80.0",
+    "typescript": "^5.0.0"
+  }
+}
