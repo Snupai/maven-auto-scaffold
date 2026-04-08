@@ -24,3 +24,10 @@ npm install
 npm run compile
 npm run package
 ```
+
+## GitHub Actions (CI/CD)
+
+- `CI` workflow runs on push to `main` and pull requests
+- It installs dependencies, compiles, packages, and uploads the `.vsix` as an artifact
+- `Publish Extension` workflow runs on GitHub Release publish (and manually)
+- On release publish, it packages and uploads the `.vsix` as a GitHub Release asset
