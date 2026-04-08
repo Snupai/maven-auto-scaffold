@@ -2,6 +2,10 @@
 
 VS Code extension that automatically creates the Maven directory structure when a `pom.xml` is added to a workspace.
 
+## Demo
+
+![Maven Auto Scaffold in action](./assets/auto-scaffold.gif)
+
 ## Features
 
 - Watches for new `pom.xml` files in any workspace
