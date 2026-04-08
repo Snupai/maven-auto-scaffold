@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import * as fs from 'fs';
 import * as path from 'path';
+import * as https from 'https';
 
 const MAVEN_DIRS = [
   'src/main/java',
@@ -17,7 +18,45 @@ function parseGroupId(pomPath: string): string | null {
   return match ? match[1].trim() : null;
 }
 
-function scaffoldMaven(pomUri: vscode.Uri) {
+function fetchMavenGitignore(): Promise<string> {
+  return new Promise((resolve, reject) => {
+    https.get('https://www.toptal.com/developers/gitignore/api/maven', (res) => {
+      if (res.statusCode !== 200) {
+        reject(new Error(`Unexpected status code: ${res.statusCode}`));
+        res.resume();
+        return;
+      }
+
+      let data = '';
+      res.setEncoding('utf8');
+      res.on('data', (chunk) => {
+        data += chunk;
+      });
+      res.on('end', () => {
+        resolve(data.endsWith('\n') ? data : `${data}\n`);
+      });
+    }).on('error', (error) => {
+      reject(error);
+    });
+  });
+}
+
+async function ensureGitignore(projectDir: string) {
+  const gitignorePath = path.join(projectDir, '.gitignore');
+  if (fs.existsSync(gitignorePath)) {
+    return;
+  }
+
+  try {
+    const gitignore = await fetchMavenGitignore();
+    fs.writeFileSync(gitignorePath, gitignore);
+  } catch {
+    // Fallback so scaffolding still works without network access.
+    fs.writeFileSync(gitignorePath, 'target/\n');
+  }
+}
+
+async function scaffoldMaven(pomUri: vscode.Uri) {
   const dir = path.dirname(pomUri.fsPath);
 
   // Don't scaffold if src/ already exists
@@ -67,6 +106,8 @@ function scaffoldMaven(pomUri: vscode.Uri) {
     }, null, 2) + '\n');
   }
 
+  await ensureGitignore(dir);
+
   vscode.window.showInformationMessage(
     `Maven-Struktur erstellt in ${path.basename(dir) || dir}. Fenster neu laden?`,
     'Reload'
@@ -86,12 +127,14 @@ export function activate(context: vscode.ExtensionContext) {
   // Watch for new pom.xml files
   const watcher = vscode.workspace.createFileSystemWatcher('**/pom.xml');
 
-  watcher.onDidCreate((uri) => scaffoldMaven(uri));
+  watcher.onDidCreate((uri) => {
+    void scaffoldMaven(uri);
+  });
 
   // Also check existing pom.xml files on activation
   vscode.workspace.findFiles('**/pom.xml').then((files) => {
     for (const f of files) {
-      scaffoldMaven(f);
+      void scaffoldMaven(f);
     }
   });
 

@@ -13,6 +13,7 @@ VS Code extension that automatically creates the Maven directory structure when 
 - Reads `groupId` from `pom.xml` and creates the correct package structure
 - Generates a Hello World `App.java` with the correct package declaration
 - Creates `.vscode/settings.json` for automatic Maven build configuration
+- Creates a Maven `.gitignore` using gitignore.io (with offline fallback)
 - Prompts to reload the window after scaffolding
 
 ## Installation

@@ -2,7 +2,7 @@
   "name": "maven-auto-scaffold",
   "displayName": "Maven Auto Scaffold",
   "description": "Automatically creates Maven directory structure when a pom.xml is added",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "publisher": "snupai",
   "repository": {
     "type": "git",
