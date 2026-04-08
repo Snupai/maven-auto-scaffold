@@ -4,6 +4,14 @@
   "description": "Automatically creates Maven directory structure when a pom.xml is added",
   "version": "1.0.5",
   "publisher": "snupai",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Snupai/maven-auto-scaffold.git"
+  },
+  "homepage": "https://github.com/Snupai/maven-auto-scaffold#readme",
+  "bugs": {
+    "url": "https://github.com/Snupai/maven-auto-scaffold/issues"
+  },
   "engines": {
     "vscode": "^1.80.0"
   },
